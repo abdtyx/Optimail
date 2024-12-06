@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+option go_package = "./;dto";
+
+package dto;
+
+import "tagger/tagger.proto";
+
+service User {
+  rpc UsersCreateUser(UsersCreateUserRequest)
+      returns (UsersCreateUserResponse) {}
+  rpc UsersLogin(UsersLoginRequest)
+      returns (UsersLoginResponse) {}
+  rpc UsersLogout(UsersLogoutRequest)
+      returns (UsersLogoutResponse) {}
+  rpc UsersChangePwd(UsersChangePwdRequest)
+      returns (UsersChangePwdResponse) {}
+  rpc UsersGetSettings(UsersGetSettingsRequest)
+      returns (UsersGetSettingsResponse) {}
+  rpc UsersUpdateSettings(UsersUpdateSettingsRequest)
+      returns (UsersUpdateSettingsResponse) {}
+}
+
+message Settings {
+    int32 summary_length = 1;
+    string summary_prompt = 2;
+    string emphasis_prompt = 3;
+}
+
+message UsersCreateUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message UsersCreateUserResponse {
+  int32 pk = 1;
+  string id = 2;
+  string message = 3;
+}
+
+message UsersLoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message UsersLoginResponse {
+    string message = 1;
+}
+
+message UsersLogoutRequest {}
+
+message UsersLogoutResponse {
+    string message = 1;
+}
+
+message UsersChangePwdRequest {
+    string old_password = 1;
+    string new_password = 2;
+    string id = 3;
+}
+
+message UsersChangePwdResponse {
+    string message = 1;
+}
+
+message UsersGetSettingsRequest {}
+
+message UsersGetSettingsResponse {
+    Settings settings = 1;
+    string message = 2;
+}
+
+message UsersUpdateSettingsRequest {
+    Settings settings = 1;
+}
+
+message UsersUpdateSettingsResponse {
+    string message = 1;
+}
