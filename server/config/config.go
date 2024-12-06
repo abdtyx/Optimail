@@ -6,6 +6,7 @@ import (
 
 type Config struct {
 	DSN       string           `mapstructure:"dsn"`
+	JWTKey    string           `mapstructure:"jwtkey"`
 	MicroUser *ConfigMicroUser `mapstructure:"microuser"`
 	ChatGPT   *ConfigGPT       `mapstructure:"gpt"`
 }
@@ -47,6 +48,11 @@ func (cfg *Config) Load() {
 	}
 	if tmp.DSN != "" {
 		cfg.DSN = tmp.DSN
+	}
+	if tmp.JWTKey != "" {
+		cfg.JWTKey = tmp.JWTKey
+	} else {
+		panic("JWTKey required in config.toml!")
 	}
 	if tmp.ChatGPT != nil {
 		if tmp.ChatGPT.Apikey != "" {

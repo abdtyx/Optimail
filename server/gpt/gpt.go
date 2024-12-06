@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"strings"
 
 	"github.com/abdtyx/Optimail/server/config"
 )
@@ -77,7 +76,7 @@ func (g *GPTCore) Chat(content string) (gptResponse string, err error) {
 	if len(chatResponse.Choices) > 0 {
 		return chatResponse.Choices[0].Message.Content, nil
 	} else {
-		err = errors.New(strings.ToTitle("No response from ChatGPT"))
+		err = errors.New("no response from ChatGPT")
 	}
 	return
 }
