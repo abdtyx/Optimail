@@ -153,7 +153,7 @@ func (s *Server) UsersUpdateSettings(ctx context.Context, in *dto.UsersUpdateSet
 		in.Settings.SummaryPrompt = fmt.Sprintf("Next I will show you an email. Your job is to analyse it and output a summary of no more than %v words.", in.Settings.SummaryLength)
 	}
 	if in.Settings.EmphasisPrompt == "" {
-		in.Settings.EmphasisPrompt = "Next I will show you an email. Your job is to mark important words in bold in the email so as to make it easier for people to read."
+		in.Settings.EmphasisPrompt = "Next I will show you an email. Your job is to mark important words in bold (using html syntax) in the email so as to make it easier for people to read."
 	}
 	setting.Email = in.Settings.Email
 	setting.SummaryLength = int64(in.Settings.SummaryLength)
@@ -199,6 +199,25 @@ func (s *Server) UsersCreateSummary(ctx context.Context, in *dto.UsersCreateSumm
 	}, nil
 }
 
+func (s *Server) UsersGetSummary(ctx context.Context, in *dto.UsersGetSummaryRequest) (*dto.UsersGetSummaryResponse, error) {
+	pk, err := s.getPkById(in.Id)
+	if err != nil {
+		return nil, err
+	}
+	var res []model.Summary
+	tx := s.db.Where("user_pk = ?", pk).Find(&res)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var contents []string
+	for _, r := range res {
+		contents = append(contents, r.Content)
+	}
+	return &dto.UsersGetSummaryResponse{
+		Summary: contents,
+	}, nil
+}
+
 func (s *Server) UsersCreateEmphasis(ctx context.Context, in *dto.UsersCreateEmphasisRequest) (*dto.UsersCreateEmphasisResponse, error) {
 	pk, err := s.getPkById(in.Id)
 	if err != nil {
@@ -214,5 +233,24 @@ func (s *Server) UsersCreateEmphasis(ctx context.Context, in *dto.UsersCreateEmp
 	}
 	return &dto.UsersCreateEmphasisResponse{
 		Message: "OK",
+	}, nil
+}
+
+func (s *Server) UsersGetEmphasis(ctx context.Context, in *dto.UsersGetEmphasisRequest) (*dto.UsersGetEmphasisResponse, error) {
+	pk, err := s.getPkById(in.Id)
+	if err != nil {
+		return nil, err
+	}
+	var res []model.Emphasis
+	tx := s.db.Where("user_pk = ?", pk).Find(&res)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var contents []string
+	for _, r := range res {
+		contents = append(contents, r.Content)
+	}
+	return &dto.UsersGetEmphasisResponse{
+		Emphasis: contents,
 	}, nil
 }

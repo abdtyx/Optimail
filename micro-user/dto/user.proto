@@ -23,8 +23,12 @@ service User {
       returns (UsersGetIdByEmailResponse) {}
   rpc UsersCreateSummary(UsersCreateSummaryRequest)
       returns (UsersCreateSummaryResponse) {}
+  rpc UsersGetSummary(UsersGetSummaryRequest)
+      returns (UsersGetSummaryResponse) {}
   rpc UsersCreateEmphasis(UsersCreateEmphasisRequest)
       returns (UsersCreateEmphasisResponse) {}
+  rpc UsersGetEmphasis(UsersGetEmphasisRequest)
+      returns (UsersGetEmphasisResponse) {}
 }
 
 message Settings {
@@ -108,6 +112,14 @@ message UsersCreateSummaryResponse {
     string message = 1;
 }
 
+message UsersGetSummaryRequest {
+    string id = 1;
+}
+
+message UsersGetSummaryResponse {
+    repeated string summary = 1;
+}
+
 message UsersCreateEmphasisRequest {
     string id = 1;
     string emphasis = 2;
@@ -115,4 +127,12 @@ message UsersCreateEmphasisRequest {
 
 message UsersCreateEmphasisResponse {
     string message = 1;
+}
+
+message UsersGetEmphasisRequest {
+    string id = 1;
+}
+
+message UsersGetEmphasisResponse {
+    repeated string emphasis = 1;
 }
