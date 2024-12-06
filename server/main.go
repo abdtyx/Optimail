@@ -22,18 +22,20 @@ func main() {
 	router := gin.Default()
 	router.GET("/", s.RootHandler)
 
-	// Email service
-	router.POST("/summarize", s.Summarize)
-	router.POST("/emphasize", s.Emphasize)
+	api := router.Group("/api")
+	{
+		// Email service
+		api.POST("/summarize", s.Summarize)
+		api.POST("/emphasize", s.Emphasize)
 
-	// DB service
-	router.POST("/user", s.CreateUser)
-	router.PUT("/user/:id/password", s.ChangePwd)
-	router.POST("/auth/login", s.Login)
-	router.POST("/auth/logout", s.Logout)
-	router.GET("/user/:id/settings", s.GetSettings)
-	router.PUT("/user/:id/settings", s.UpdateSettings)
-	router.POST("/user/secret/reset", s.ResetSecret)
+		// DB service
+		api.POST("/user", s.CreateUser)
+		api.PUT("/user/:id/password", s.ChangePwd)
+		api.POST("/auth/login", s.Login)
+		api.POST("/auth/logout", s.Logout)
+		api.GET("/user/:id/settings", s.GetSettings)
+		api.PUT("/user/:id/settings", s.UpdateSettings)
+	}
 
 	srv := &http.Server{
 		Addr:    ":8080",
