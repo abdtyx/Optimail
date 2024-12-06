@@ -23,12 +23,15 @@ service User {
       returns (UsersGetIdByEmailResponse) {}
   rpc UsersCreateSummary(UsersCreateSummaryRequest)
       returns (UsersCreateSummaryResponse) {}
+  rpc UsersCreateEmphasis(UsersCreateEmphasisRequest)
+      returns (UsersCreateEmphasisResponse) {}
 }
 
 message Settings {
-    int32 summary_length = 1;
-    string summary_prompt = 2;
-    string emphasis_prompt = 3;
+    string email = 1;
+    int32 summary_length = 2;
+    string summary_prompt = 3;
+    string emphasis_prompt = 4;
 }
 
 message UsersCreateUserRequest {
@@ -48,7 +51,8 @@ message UsersLoginRequest {
 }
 
 message UsersLoginResponse {
-    string message = 1;
+    string id = 1;
+    string message = 2;
 }
 
 message UsersLogoutRequest {
@@ -96,9 +100,19 @@ message UsersGetIdByEmailResponse {
 }
 
 message UsersCreateSummaryRequest {
-    string summary = 1;
+    string id = 1;
+    string summary = 2;
 }
 
 message UsersCreateSummaryResponse {
+    string message = 1;
+}
+
+message UsersCreateEmphasisRequest {
+    string id = 1;
+    string emphasis = 2;
+}
+
+message UsersCreateEmphasisResponse {
     string message = 1;
 }

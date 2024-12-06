@@ -27,6 +27,7 @@ const (
 	User_UsersUpdateSettings_FullMethodName = "/dto.User/UsersUpdateSettings"
 	User_UsersGetIdByEmail_FullMethodName   = "/dto.User/UsersGetIdByEmail"
 	User_UsersCreateSummary_FullMethodName  = "/dto.User/UsersCreateSummary"
+	User_UsersCreateEmphasis_FullMethodName = "/dto.User/UsersCreateEmphasis"
 )
 
 // UserClient is the client API for User service.
@@ -41,6 +42,7 @@ type UserClient interface {
 	UsersUpdateSettings(ctx context.Context, in *UsersUpdateSettingsRequest, opts ...grpc.CallOption) (*UsersUpdateSettingsResponse, error)
 	UsersGetIdByEmail(ctx context.Context, in *UsersGetIdByEmailRequest, opts ...grpc.CallOption) (*UsersGetIdByEmailResponse, error)
 	UsersCreateSummary(ctx context.Context, in *UsersCreateSummaryRequest, opts ...grpc.CallOption) (*UsersCreateSummaryResponse, error)
+	UsersCreateEmphasis(ctx context.Context, in *UsersCreateEmphasisRequest, opts ...grpc.CallOption) (*UsersCreateEmphasisResponse, error)
 }
 
 type userClient struct {
@@ -123,6 +125,15 @@ func (c *userClient) UsersCreateSummary(ctx context.Context, in *UsersCreateSumm
 	return out, nil
 }
 
+func (c *userClient) UsersCreateEmphasis(ctx context.Context, in *UsersCreateEmphasisRequest, opts ...grpc.CallOption) (*UsersCreateEmphasisResponse, error) {
+	out := new(UsersCreateEmphasisResponse)
+	err := c.cc.Invoke(ctx, User_UsersCreateEmphasis_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -135,6 +146,7 @@ type UserServer interface {
 	UsersUpdateSettings(context.Context, *UsersUpdateSettingsRequest) (*UsersUpdateSettingsResponse, error)
 	UsersGetIdByEmail(context.Context, *UsersGetIdByEmailRequest) (*UsersGetIdByEmailResponse, error)
 	UsersCreateSummary(context.Context, *UsersCreateSummaryRequest) (*UsersCreateSummaryResponse, error)
+	UsersCreateEmphasis(context.Context, *UsersCreateEmphasisRequest) (*UsersCreateEmphasisResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -165,6 +177,9 @@ func (UnimplementedUserServer) UsersGetIdByEmail(context.Context, *UsersGetIdByE
 }
 func (UnimplementedUserServer) UsersCreateSummary(context.Context, *UsersCreateSummaryRequest) (*UsersCreateSummaryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UsersCreateSummary not implemented")
+}
+func (UnimplementedUserServer) UsersCreateEmphasis(context.Context, *UsersCreateEmphasisRequest) (*UsersCreateEmphasisResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UsersCreateEmphasis not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -323,6 +338,24 @@ func _User_UsersCreateSummary_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_UsersCreateEmphasis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UsersCreateEmphasisRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UsersCreateEmphasis(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UsersCreateEmphasis_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UsersCreateEmphasis(ctx, req.(*UsersCreateEmphasisRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +394,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UsersCreateSummary",
 			Handler:    _User_UsersCreateSummary_Handler,
+		},
+		{
+			MethodName: "UsersCreateEmphasis",
+			Handler:    _User_UsersCreateEmphasis_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
