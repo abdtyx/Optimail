@@ -5,7 +5,6 @@ go 1.23
 require (
 	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.19.0
-	github.com/srikrsna/protoc-gen-gotag v1.0.2
 	golang.org/x/crypto v0.27.0
 	google.golang.org/grpc v1.68.1
 	google.golang.org/protobuf v1.35.2
