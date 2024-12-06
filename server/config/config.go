@@ -5,14 +5,19 @@ import (
 )
 
 type Config struct {
-	DSN     string     `mapstructure:"dsn"`
-	ChatGPT *ConfigGPT `mapstructure:"gpt"`
+	DSN       string           `mapstructure:"dsn"`
+	MicroUser *ConfigMicroUser `mapstructure:"microuser"`
+	ChatGPT   *ConfigGPT       `mapstructure:"gpt"`
 }
 
 type ConfigGPT struct {
-	Apiurl string
-	Model  string
-	Apikey string
+	Apiurl string `mapstructure:"apiurl"`
+	Model  string `mapstructure:"model"`
+	Apikey string `mapstructure:"apikey"`
+}
+
+type ConfigMicroUser struct {
+	GrpcAddr string `mapstructure:"grpc_addr"`
 }
 
 func New() *Config {
@@ -22,6 +27,9 @@ func New() *Config {
 			Apiurl: "https://api.openai.com/v1/chat/completions",
 			Model:  "gpt-3.5-turbo",
 			Apikey: "",
+		},
+		MicroUser: &ConfigMicroUser{
+			GrpcAddr: "localhost:50051",
 		},
 	}
 }
@@ -51,6 +59,11 @@ func (cfg *Config) Load() {
 		}
 		if tmp.ChatGPT.Model != "" {
 			cfg.ChatGPT.Model = tmp.ChatGPT.Model
+		}
+	}
+	if tmp.MicroUser != nil {
+		if tmp.MicroUser.GrpcAddr != "" {
+			cfg.MicroUser.GrpcAddr = tmp.MicroUser.GrpcAddr
 		}
 	}
 }

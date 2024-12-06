@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	pb "github.com/abdtyx/Optimail/micro-user/dto"
+	"google.golang.org/grpc"
 
 	"github.com/abdtyx/Optimail/server/config"
 	"github.com/abdtyx/Optimail/server/gpt"
@@ -14,10 +15,12 @@ import (
 )
 
 type Service struct {
-	cfg        *config.Config
-	db         *gorm.DB
-	userclient *pb.UserClient
-	gpt        *gpt.GPTCore
+	cfg *config.Config
+	db  *gorm.DB
+	gpt *gpt.GPTCore
+
+	userclient pb.UserClient
+	conn       *grpc.ClientConn
 }
 
 func New(cfg *config.Config) *Service {
@@ -38,6 +41,11 @@ func (s *Service) init() error {
 	s.db = db.Debug()
 
 	// micro-user client
+	s.conn, err = grpc.NewClient(s.cfg.MicroUser.GrpcAddr)
+	if err != nil {
+		panic("failed to connect micro-user: " + err.Error())
+	}
+	s.userclient = pb.NewUserClient(s.conn)
 
 	// gpt
 	s.gpt = gpt.New(s.cfg.ChatGPT)
@@ -51,7 +59,13 @@ func (s *Service) Close() error {
 		if err != nil {
 			return err
 		}
-		return db.Close()
+		err = db.Close()
+		if err != nil {
+			return err
+		}
+	}
+	if s.conn != nil {
+		s.conn.Close()
 	}
 	return nil
 }
