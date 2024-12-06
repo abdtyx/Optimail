@@ -6,6 +6,7 @@ import (
 
 type Setting struct {
 	UserPK         int64  `gorm:"column:user_pk;type:bigint unsigned;not null;index" json:"user_pk"`
+	Email          string `gorm:"type:varchar(255);not null" json:"email"`
 	SummaryLength  int64  `gorm:"column:summary_length;type:smallint unsigned;not null" json:"summary_length"`
 	SummaryPrompt  string `gorm:"column:summary_prompt;type:text;not null" json:"summary_prompt"`
 	EmphasisPrompt string `gorm:"column:emphasis_prompt;type:text;not null" json:"emphasis_prompt"`

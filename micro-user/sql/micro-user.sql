@@ -11,6 +11,7 @@ CREATE TABLE `users`  (
 CREATE TABLE `user_settings`  (
   `user_pk` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'pk of user',
   `pk` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing primary key',
+  `email` VARCHAR(255) NOT NULL,
   `summary_length` SMALLINT UNSIGNED NOT NULL DEFAULT 50,
   `summary_prompt` TEXT NOT NULL COMMENT 'summary prompt when call chatgpt',
   `emphasis_prompt` TEXT NOT NULL COMMENT 'emphasis prompt when call chatgpt',

@@ -4,7 +4,7 @@ option go_package = "./;dto";
 
 package dto;
 
-import "tagger/tagger.proto";
+// import "tagger/tagger.proto";
 
 service User {
   rpc UsersCreateUser(UsersCreateUserRequest)
@@ -19,6 +19,10 @@ service User {
       returns (UsersGetSettingsResponse) {}
   rpc UsersUpdateSettings(UsersUpdateSettingsRequest)
       returns (UsersUpdateSettingsResponse) {}
+  rpc UsersGetIdByEmail(UsersGetIdByEmailRequest)
+      returns (UsersGetIdByEmailResponse) {}
+  rpc UsersCreateSummary(UsersCreateSummaryRequest)
+      returns (UsersCreateSummaryResponse) {}
 }
 
 message Settings {
@@ -33,7 +37,7 @@ message UsersCreateUserRequest {
 }
 
 message UsersCreateUserResponse {
-  int32 pk = 1;
+  int64 pk = 1;
   string id = 2;
   string message = 3;
 }
@@ -47,7 +51,9 @@ message UsersLoginResponse {
     string message = 1;
 }
 
-message UsersLogoutRequest {}
+message UsersLogoutRequest {
+    string id = 1;
+}
 
 message UsersLogoutResponse {
     string message = 1;
@@ -63,7 +69,9 @@ message UsersChangePwdResponse {
     string message = 1;
 }
 
-message UsersGetSettingsRequest {}
+message UsersGetSettingsRequest {
+    string id = 1;
+}
 
 message UsersGetSettingsResponse {
     Settings settings = 1;
@@ -71,9 +79,26 @@ message UsersGetSettingsResponse {
 }
 
 message UsersUpdateSettingsRequest {
-    Settings settings = 1;
+    string id = 1;
+    Settings settings = 2;
 }
 
 message UsersUpdateSettingsResponse {
+    string message = 1;
+}
+
+message UsersGetIdByEmailRequest {
+    string email = 1;
+}
+
+message UsersGetIdByEmailResponse {
+    string id = 1;
+}
+
+message UsersCreateSummaryRequest {
+    string summary = 1;
+}
+
+message UsersCreateSummaryResponse {
     string message = 1;
 }

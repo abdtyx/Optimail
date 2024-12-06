@@ -25,6 +25,8 @@ const (
 	User_UsersChangePwd_FullMethodName      = "/dto.User/UsersChangePwd"
 	User_UsersGetSettings_FullMethodName    = "/dto.User/UsersGetSettings"
 	User_UsersUpdateSettings_FullMethodName = "/dto.User/UsersUpdateSettings"
+	User_UsersGetIdByEmail_FullMethodName   = "/dto.User/UsersGetIdByEmail"
+	User_UsersCreateSummary_FullMethodName  = "/dto.User/UsersCreateSummary"
 )
 
 // UserClient is the client API for User service.
@@ -37,6 +39,8 @@ type UserClient interface {
 	UsersChangePwd(ctx context.Context, in *UsersChangePwdRequest, opts ...grpc.CallOption) (*UsersChangePwdResponse, error)
 	UsersGetSettings(ctx context.Context, in *UsersGetSettingsRequest, opts ...grpc.CallOption) (*UsersGetSettingsResponse, error)
 	UsersUpdateSettings(ctx context.Context, in *UsersUpdateSettingsRequest, opts ...grpc.CallOption) (*UsersUpdateSettingsResponse, error)
+	UsersGetIdByEmail(ctx context.Context, in *UsersGetIdByEmailRequest, opts ...grpc.CallOption) (*UsersGetIdByEmailResponse, error)
+	UsersCreateSummary(ctx context.Context, in *UsersCreateSummaryRequest, opts ...grpc.CallOption) (*UsersCreateSummaryResponse, error)
 }
 
 type userClient struct {
@@ -101,6 +105,24 @@ func (c *userClient) UsersUpdateSettings(ctx context.Context, in *UsersUpdateSet
 	return out, nil
 }
 
+func (c *userClient) UsersGetIdByEmail(ctx context.Context, in *UsersGetIdByEmailRequest, opts ...grpc.CallOption) (*UsersGetIdByEmailResponse, error) {
+	out := new(UsersGetIdByEmailResponse)
+	err := c.cc.Invoke(ctx, User_UsersGetIdByEmail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) UsersCreateSummary(ctx context.Context, in *UsersCreateSummaryRequest, opts ...grpc.CallOption) (*UsersCreateSummaryResponse, error) {
+	out := new(UsersCreateSummaryResponse)
+	err := c.cc.Invoke(ctx, User_UsersCreateSummary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -111,6 +133,8 @@ type UserServer interface {
 	UsersChangePwd(context.Context, *UsersChangePwdRequest) (*UsersChangePwdResponse, error)
 	UsersGetSettings(context.Context, *UsersGetSettingsRequest) (*UsersGetSettingsResponse, error)
 	UsersUpdateSettings(context.Context, *UsersUpdateSettingsRequest) (*UsersUpdateSettingsResponse, error)
+	UsersGetIdByEmail(context.Context, *UsersGetIdByEmailRequest) (*UsersGetIdByEmailResponse, error)
+	UsersCreateSummary(context.Context, *UsersCreateSummaryRequest) (*UsersCreateSummaryResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -135,6 +159,12 @@ func (UnimplementedUserServer) UsersGetSettings(context.Context, *UsersGetSettin
 }
 func (UnimplementedUserServer) UsersUpdateSettings(context.Context, *UsersUpdateSettingsRequest) (*UsersUpdateSettingsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UsersUpdateSettings not implemented")
+}
+func (UnimplementedUserServer) UsersGetIdByEmail(context.Context, *UsersGetIdByEmailRequest) (*UsersGetIdByEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UsersGetIdByEmail not implemented")
+}
+func (UnimplementedUserServer) UsersCreateSummary(context.Context, *UsersCreateSummaryRequest) (*UsersCreateSummaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UsersCreateSummary not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -257,6 +287,42 @@ func _User_UsersUpdateSettings_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_UsersGetIdByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UsersGetIdByEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UsersGetIdByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UsersGetIdByEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UsersGetIdByEmail(ctx, req.(*UsersGetIdByEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_UsersCreateSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UsersCreateSummaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UsersCreateSummary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UsersCreateSummary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UsersCreateSummary(ctx, req.(*UsersCreateSummaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +353,14 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UsersUpdateSettings",
 			Handler:    _User_UsersUpdateSettings_Handler,
+		},
+		{
+			MethodName: "UsersGetIdByEmail",
+			Handler:    _User_UsersGetIdByEmail_Handler,
+		},
+		{
+			MethodName: "UsersCreateSummary",
+			Handler:    _User_UsersCreateSummary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
