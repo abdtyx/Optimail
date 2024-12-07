@@ -38,7 +38,8 @@ func (s *Server) UsersCreateUser(ctx context.Context, in *dto.UsersCreateUserReq
 	}
 
 	user.ID = uuid.NewString()
-	user.Password = hex.EncodeToString(argon2Key([]byte(in.Password), []byte(user.ID), 255))
+	user.Username = in.Username
+	user.Password = hex.EncodeToString(argon2Key([]byte(in.Password), []byte(user.ID), 256))
 
 	if err := s.db.Create(&user).Error; err != nil {
 		return nil, err
@@ -74,7 +75,7 @@ func (s *Server) UsersLogin(ctx context.Context, in *dto.UsersLoginRequest) (*dt
 		}
 	}
 
-	if h := hex.EncodeToString(argon2Key([]byte(in.Password), []byte(user.ID), 255)); h != user.Password {
+	if h := hex.EncodeToString(argon2Key([]byte(in.Password), []byte(user.ID), 256)); h != user.Password {
 		return nil, errors.New("invalid password")
 	}
 
@@ -100,11 +101,11 @@ func (s *Server) UsersChangePwd(ctx context.Context, in *dto.UsersChangePwdReque
 		}
 	}
 
-	if h := hex.EncodeToString(argon2Key([]byte(in.OldPassword), []byte(user.ID), 255)); h != user.Password {
+	if h := hex.EncodeToString(argon2Key([]byte(in.OldPassword), []byte(user.ID), 256)); h != user.Password {
 		return nil, errors.New("invalid password")
 	}
 
-	user.Password = hex.EncodeToString(argon2Key([]byte(in.NewPassword), []byte(user.ID), 255))
+	user.Password = hex.EncodeToString(argon2Key([]byte(in.NewPassword), []byte(user.ID), 256))
 
 	tx := s.db.Save(&user)
 	if tx.Error != nil {
@@ -159,7 +160,7 @@ func (s *Server) UsersUpdateSettings(ctx context.Context, in *dto.UsersUpdateSet
 	setting.SummaryLength = int64(in.Settings.SummaryLength)
 	setting.SummaryPrompt = in.Settings.SummaryPrompt
 	setting.EmphasisPrompt = in.Settings.EmphasisPrompt
-	s.db.Save(&setting)
+	s.db.Model(&setting).Where("user_pk = ?", pk).Updates(setting)
 	return &dto.UsersUpdateSettingsResponse{
 		Message: "OK",
 	}, nil
