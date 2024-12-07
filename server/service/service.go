@@ -303,8 +303,8 @@ func (s *Service) GetSettings(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"settings": resp,
-		"message":  "OK",
+		"data":    resp.Settings,
+		"message": "OK",
 	})
 }
 
@@ -334,6 +334,54 @@ func (s *Service) UpdateSettings(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Settings updated",
+	})
+}
+
+func (s *Service) GetSummary(c *gin.Context) {
+	jwtstr := c.GetHeader("Authentication")
+	id, err := verifyJwt(jwtstr, []byte(s.cfg.JWTKey))
+	if err != nil {
+		log.Println("**ERROR**: GetSummary:", err)
+		c.AbortWithStatusJSON(http.StatusForbidden, err)
+		return
+	}
+
+	var req = &pb.UsersGetSummaryRequest{
+		Id: id,
+	}
+	resp, err := s.userclient.UsersGetSummary(context.Background(), req)
+	if err != nil {
+		log.Println("**ERROR**: UsersGetSummary:", err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data":    resp.Summary,
+		"message": "OK",
+	})
+}
+
+func (s *Service) GetEmphasis(c *gin.Context) {
+	jwtstr := c.GetHeader("Authentication")
+	id, err := verifyJwt(jwtstr, []byte(s.cfg.JWTKey))
+	if err != nil {
+		log.Println("**ERROR**: GetEmphasis:", err)
+		c.AbortWithStatusJSON(http.StatusForbidden, err)
+		return
+	}
+
+	var req = &pb.UsersGetEmphasisRequest{
+		Id: id,
+	}
+	resp, err := s.userclient.UsersGetEmphasis(context.Background(), req)
+	if err != nil {
+		log.Println("**ERROR**: UsersGetEmphasis:", err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data":    resp.Emphasis,
+		"message": "OK",
 	})
 }
 

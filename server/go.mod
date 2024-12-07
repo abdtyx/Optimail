@@ -3,7 +3,7 @@ module github.com/abdtyx/Optimail/server
 go 1.23
 
 require (
-	github.com/abdtyx/Optimail/micro-user v0.0.0-20241206193959-14a93dd3a544
+	github.com/abdtyx/Optimail/micro-user v0.0.0-20241206210442-76b934b99269
 	github.com/emersion/go-imap v1.2.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/spf13/viper v1.19.0

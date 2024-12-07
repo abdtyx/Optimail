@@ -45,6 +45,8 @@ func main() {
 		api.POST("/auth/logout", s.Logout)
 		api.GET("/user/settings", s.GetSettings)
 		api.PUT("/user/settings", s.UpdateSettings)
+		api.GET("/user/summary", s.GetSummary)
+		api.GET("/user/emphasis", s.GetEmphasis)
 	}
 
 	srv := &http.Server{
