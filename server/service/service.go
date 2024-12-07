@@ -318,7 +318,8 @@ func (s *Service) UpdateSettings(c *gin.Context) {
 	}
 
 	var req = &pb.UsersUpdateSettingsRequest{
-		Id: id,
+		Id:       id,
+		Settings: &pb.Settings{},
 	}
 	if err := c.ShouldBindJSON(req.Settings); err != nil {
 		log.Println("**ERROR**: UpdateSettings:", err)
@@ -425,7 +426,10 @@ func genJwt(id string, expire time.Time, key []byte) (jwtstr string, err error) 
 }
 
 func verifyJwt(jwtstr string, key []byte) (id string, err error) {
-	jwtbyte := []byte(jwtstr)
+	jwtbyte, err := hex.DecodeString(jwtstr)
+	if err != nil {
+		return "", errors.New("invalid jwt")
+	}
 	// check length
 	l := len(jwtbyte)
 	if l <= 64 {
