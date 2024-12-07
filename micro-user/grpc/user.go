@@ -51,7 +51,7 @@ func (s *Server) UsersCreateUser(ctx context.Context, in *dto.UsersCreateUserReq
 		Email:          "",
 		SummaryLength:  50,
 		SummaryPrompt:  "Next I will show you an email. Your job is to analyse it and output a summary of no more than 50 words.",
-		EmphasisPrompt: "Next I will show you an email. Your job is to mark important words in bold (using html syntax) in the email so as to make it easier for people to read.",
+		EmphasisPrompt: "Next I will show you an email. Your job is to mark important words by adding <b></b> tag around them in the email so as to make it easier for people to read.",
 	}
 
 	tx = s.db.Create(&setting)
@@ -154,7 +154,7 @@ func (s *Server) UsersUpdateSettings(ctx context.Context, in *dto.UsersUpdateSet
 		in.Settings.SummaryPrompt = fmt.Sprintf("Next I will show you an email. Your job is to analyse it and output a summary of no more than %v words.", in.Settings.SummaryLength)
 	}
 	if in.Settings.EmphasisPrompt == "" {
-		in.Settings.EmphasisPrompt = "Next I will show you an email. Your job is to mark important words in bold (using html syntax) in the email so as to make it easier for people to read."
+		in.Settings.EmphasisPrompt = "Next I will show you an email. Your job is to mark important words by adding <b></b> tag around them in the email so as to make it easier for people to read."
 	}
 	setting.Email = in.Settings.Email
 	setting.SummaryLength = int64(in.Settings.SummaryLength)
