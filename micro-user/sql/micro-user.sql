@@ -1,11 +1,11 @@
 CREATE TABLE `users`  (
   `id` VARCHAR(36) UNIQUE NOT NULL COMMENT 'UUID',
   `username` VARCHAR(64) UNIQUE NOT NULL COMMENT 'username',
-  `password` VARCHAR(255) NOT NULL COMMENT 'argon2hash',
+  `password` VARCHAR(512) NOT NULL COMMENT 'argon2hash',
   `pk` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing primary key',
   PRIMARY KEY (`pk`),
   INDEX `idx_users_id`(`id`) USING BTREE,
-  INDEX `idx_users_username`(`username`) USING BTREE,
+  INDEX `idx_users_username`(`username`) USING BTREE
 );
 
 CREATE TABLE `user_settings`  (
@@ -17,7 +17,7 @@ CREATE TABLE `user_settings`  (
   `emphasis_prompt` TEXT NOT NULL COMMENT 'emphasis prompt when call chatgpt',
 
   PRIMARY KEY (`pk`),
-  INDEX `idx_user_profiles_user_pk`(`user_pk`) USING BTREE,
+  INDEX `idx_user_profiles_user_pk`(`user_pk`) USING BTREE
 );
 
 CREATE TABLE `summary`  (
@@ -26,7 +26,7 @@ CREATE TABLE `summary`  (
   `content` TEXT NOT NULL COMMENT 'summary content',
 
   PRIMARY KEY (`pk`),
-  INDEX `idx_summary_user_pk`(`user_pk`) USING BTREE,
+  INDEX `idx_summary_user_pk`(`user_pk`) USING BTREE
 );
 
 CREATE TABLE `emphasis`  (
@@ -35,7 +35,7 @@ CREATE TABLE `emphasis`  (
   `content` TEXT NOT NULL COMMENT 'emphasis content',
 
   PRIMARY KEY (`pk`),
-  INDEX `idx_emphasis_user_pk`(`user_pk`) USING BTREE,
+  INDEX `idx_emphasis_user_pk`(`user_pk`) USING BTREE
 );
 
 ALTER TABLE `user_settings` ADD CONSTRAINT `fk_user_settings` FOREIGN KEY (`user_pk`) REFERENCES `users` (`pk`) ON DELETE RESTRICT ON UPDATE RESTRICT;
