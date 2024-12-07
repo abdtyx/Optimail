@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimail</title>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+  <header>
+    <h1>Optimail</h1>
+    <nav id="headerNav">
+      <a href="/login">Login</a>
+      <button id="logoutButton">Logout</button>
+    </nav>
+  </header>
+  <main>
+    <h1>Welcome to Optimail by abdtyx!</h1>
+    <p>This is a simple web service that can summarize your email and mark important words in your email.</p>
+    <h2>Getting Started</h2>
+    <p>1. Create a user</p>
+    <p>2. Set your email in settings</p>
+    <p>3. Forward your email to admin@abdtyx.click and results will be available in a few seconds</p>
+    <nav>
+      <a href="/user">Create User</a>
+      <a href="/password">Reset Password</a>
+      <a href="/settings">User Settings</a>
+      <a href="/summary">Summary Results</a>
+      <a href="/emphasis">Emphasis Results</a>
+    </nav>
+  </main>
+  <script>
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/auth/logout', {
+          method: 'POST'
+        });
+
+        if (response.ok) {
+          alert('Logged out successfully!');
+          window.location.href = '/'; // Redirect to home after creation
+        } else {
+          alert('Failed to logout. Please try again.');
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

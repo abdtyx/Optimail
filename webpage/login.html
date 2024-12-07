@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+
+<body>
+  <header>
+    <h1>Login</h1>
+  </header>
+  <main>
+    <h1>Welcome Back!</h1>
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required placeholder="Enter your username">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter your password">
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const username = form.username.value.trim();
+      const password = form.password.value;
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+          const authHeader = response.headers.get('Authentication');
+          if (authHeader) {
+            localStorage.setItem('authToken', authHeader);
+            alert('Login successful!');
+            form.reset();
+            window.location.href = '/'; // Redirect to home after creation
+          } else {
+            alert('Authentication header is missing!');
+          }
+        } else {
+          const errorData = await response.json();
+          alert(`Error: ${errorData.message || 'Login failed'}`);
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+
+</html>

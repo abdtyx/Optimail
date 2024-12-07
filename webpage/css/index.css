@@ -1,0 +1,92 @@
+/* GitHub Styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  background-color: #f6f8fa;
+  color: #24292f;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: #24292f;
+  color: #fff;
+  padding: 1rem;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(27, 31, 35, 0.12);
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 1rem;
+  color: #586069;
+  margin-bottom: 1.5rem;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+a {
+  color: #0366d6;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+a:hover {
+  background-color: #e1e4e8;
+}
+
+#headerNav {
+  position: absolute;
+  right: 1rem;
+  top: 35%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 1rem;
+}
+
+#headerNav a, #logoutButton {
+  font-size: 1rem;
+  color: #fff;
+  text-decoration: none;
+  background-color: #0366d6;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+#headerNav a:hover, #logoutButton:hover {
+  background-color: #0056b3;
+}
+
+#logoutButton {
+  background-color: #d73a49;
+}
+
+#logoutButton:hover {
+  background-color: #b31d28;
+}

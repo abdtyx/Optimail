@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Emphasis</title>
+  <link rel="stylesheet" href="/css/emphasis.css">
+</head>
+
+<body>
+  <header>
+    <h1>Email Emphasis</h1>
+  </header>
+  <main>
+    <h2>Your Email Emphasis</h2>
+    <div id="summaryContent"></div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        alert('You are not authenticated.');
+        window.location.href = '/login';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/user/emphasis', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication': authToken
+          }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          const summaryContent = document.getElementById('summaryContent');
+
+          if (result.data && Array.isArray(result.data)) {
+            summaryContent.innerHTML = result.data.map(item => `<p>${item}</p>`).join('');
+          } else {
+            summaryContent.innerHTML = '<p>No emphasis data available.</p>';
+          }
+        } else {
+            alert('Failed to fetch emphasis. Please try again.');
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+
+</html>
