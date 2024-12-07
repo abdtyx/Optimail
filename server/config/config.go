@@ -5,10 +5,10 @@ import (
 )
 
 type Config struct {
-	DSN       string           `mapstructure:"dsn"`
 	JWTKey    string           `mapstructure:"jwtkey"`
 	MicroUser *ConfigMicroUser `mapstructure:"microuser"`
 	ChatGPT   *ConfigGPT       `mapstructure:"gpt"`
+	Webpage   *ConfigWebpage   `mapstructure:"webpage"`
 }
 
 type ConfigGPT struct {
@@ -21,9 +21,12 @@ type ConfigMicroUser struct {
 	GrpcAddr string `mapstructure:"grpc_addr"`
 }
 
+type ConfigWebpage struct {
+	BasePath string `mapstructure:"base_path"`
+}
+
 func New() *Config {
 	return &Config{
-		DSN: "root:password@tcp(localhost:3306)/test",
 		ChatGPT: &ConfigGPT{
 			Apiurl: "https://api.openai.com/v1/chat/completions",
 			Model:  "gpt-3.5-turbo",
@@ -31,6 +34,9 @@ func New() *Config {
 		},
 		MicroUser: &ConfigMicroUser{
 			GrpcAddr: "localhost:50051",
+		},
+		Webpage: &ConfigWebpage{
+			BasePath: "../",
 		},
 	}
 }
@@ -45,9 +51,6 @@ func (cfg *Config) Load() {
 	tmp := &Config{}
 	if err := viper.UnmarshalKey("server", tmp); err != nil {
 		panic("failed to init server config, error: " + err.Error())
-	}
-	if tmp.DSN != "" {
-		cfg.DSN = tmp.DSN
 	}
 	if tmp.JWTKey != "" {
 		cfg.JWTKey = tmp.JWTKey
@@ -72,4 +75,13 @@ func (cfg *Config) Load() {
 			cfg.MicroUser.GrpcAddr = tmp.MicroUser.GrpcAddr
 		}
 	}
+	if tmp.Webpage != nil {
+		if tmp.Webpage.BasePath != "" {
+			cfg.Webpage.BasePath = tmp.Webpage.BasePath
+		}
+	}
+}
+
+func (cfg *Config) String() string {
+	return cfg.JWTKey + "\n" + cfg.ChatGPT.Apiurl + "\n" + cfg.ChatGPT.Model + "\n" + cfg.ChatGPT.Apikey + "\n" + cfg.MicroUser.GrpcAddr + "\n" + cfg.Webpage.BasePath + "\n"
 }

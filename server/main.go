@@ -17,10 +17,20 @@ import (
 func main() {
 	// Initialization
 	cfg := config.New()
+	cfg.Load()
+	log.Println(cfg)
 	s := service.New(cfg)
 
 	router := gin.Default()
-	router.GET("/", s.RootHandler)
+
+	// front end webpage
+	router.StaticFile("/", cfg.Webpage.BasePath+"/index.html")
+	router.StaticFile("/", cfg.Webpage.BasePath+"/user.html")
+	router.StaticFile("/", cfg.Webpage.BasePath+"/password.html")
+	router.StaticFile("/", cfg.Webpage.BasePath+"/settings.html")
+	router.StaticFile("/", cfg.Webpage.BasePath+"/summary.html")
+	router.StaticFile("/", cfg.Webpage.BasePath+"/emphasis.html")
+	// router.GET("/", s.RootHandler)
 
 	api := router.Group("/api")
 	{
@@ -30,11 +40,11 @@ func main() {
 
 		// DB service
 		api.POST("/user", s.CreateUser)
-		api.PUT("/user/:id/password", s.ChangePwd)
+		api.PUT("/user/password", s.ChangePwd)
 		api.POST("/auth/login", s.Login)
 		api.POST("/auth/logout", s.Logout)
-		api.GET("/user/:id/settings", s.GetSettings)
-		api.PUT("/user/:id/settings", s.UpdateSettings)
+		api.GET("/user/settings", s.GetSettings)
+		api.PUT("/user/settings", s.UpdateSettings)
 	}
 
 	srv := &http.Server{
