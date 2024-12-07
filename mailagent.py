@@ -24,7 +24,7 @@ with imaplib.IMAP4(IMAP_SERVER) as mail:
             raw_email = data[0][1]
             msg = email.message_from_bytes(raw_email)
             # get sender
-            from_header = msg["From"]
+            from_header = msg["To"]
             sender_email = None
             if from_header:
                 decoded_header = decode_header(from_header)
