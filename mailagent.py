@@ -37,6 +37,8 @@ with imaplib.IMAP4(IMAP_SERVER) as mail:
                     elif "@" in part:
                         sender_email = part
                         break
+            if sender_email == EMAIL:
+                continue
             # get body
             body = ""
             emailaddr = msg['']
