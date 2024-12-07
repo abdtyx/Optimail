@@ -33,9 +33,20 @@
   </main>
   <script>
     document.getElementById('logoutButton').addEventListener('click', async () => {
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        alert('You are not authenticated.');
+        window.location.href = '/login';
+        return;
+      }
+
       try {
         const response = await fetch('/api/auth/logout', {
-          method: 'POST'
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication': authToken
+          }
         });
 
         if (response.ok) {
