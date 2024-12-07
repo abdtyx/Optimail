@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/abdtyx/Optimail/micro-user/dto"
 	"github.com/abdtyx/Optimail/micro-user/model"
@@ -156,7 +157,7 @@ func (s *Server) UsersUpdateSettings(ctx context.Context, in *dto.UsersUpdateSet
 	if in.Settings.EmphasisPrompt == "" {
 		in.Settings.EmphasisPrompt = "Next I will show you an email. Your job is to mark important words by adding <b></b> tag around them in the email so as to make it easier for people to read."
 	}
-	setting.Email = in.Settings.Email
+	setting.Email = strings.ToLower(in.Settings.Email)
 	setting.SummaryLength = int64(in.Settings.SummaryLength)
 	setting.SummaryPrompt = in.Settings.SummaryPrompt
 	setting.EmphasisPrompt = in.Settings.EmphasisPrompt
