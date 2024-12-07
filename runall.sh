@@ -1,5 +1,6 @@
 #!/bin/bash
-./micro-user/run.sh
-./server/run.sh
+cd micro-user && ./run.sh
+cd ../server && ./run.sh
+cd ..
 sleep 1
 python3 ./mailagent.py
