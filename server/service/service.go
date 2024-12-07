@@ -17,13 +17,10 @@ import (
 	"github.com/abdtyx/Optimail/server/config"
 	"github.com/abdtyx/Optimail/server/gpt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 type Service struct {
 	cfg *config.Config
-	db  *gorm.DB
 	gpt *gpt.GPTCore
 
 	userclient pb.UserClient
@@ -40,15 +37,9 @@ func New(cfg *config.Config) *Service {
 }
 
 func (s *Service) init() error {
-	// gorm
-	db, err := gorm.Open(mysql.Open(s.cfg.DSN), &gorm.Config{})
-	if err != nil {
-		panic("failed to open database connection, error: " + err.Error())
-	}
-	s.db = db.Debug()
-
 	// micro-user client
-	s.conn, err = grpc.NewClient(s.cfg.MicroUser.GrpcAddr)
+	var err error
+	s.conn, err = grpc.NewClient(s.cfg.MicroUser.GrpcAddr, grpc.WithInsecure())
 	if err != nil {
 		panic("failed to connect micro-user: " + err.Error())
 	}
@@ -61,16 +52,6 @@ func (s *Service) init() error {
 }
 
 func (s *Service) Close() error {
-	if s.db != nil {
-		db, err := s.db.DB()
-		if err != nil {
-			return err
-		}
-		err = db.Close()
-		if err != nil {
-			return err
-		}
-	}
 	if s.conn != nil {
 		s.conn.Close()
 	}
@@ -81,10 +62,10 @@ func (s *Service) Close() error {
 	Homepage
 */
 
-func (s *Service) RootHandler(c *gin.Context) {
-	// return webpage
-	c.String(http.StatusOK, "Welcome abdtyx's Optimail")
-}
+// func (s *Service) RootHandler(c *gin.Context) {
+// 	// return webpage
+// 	c.String(http.StatusOK, "Welcome abdtyx's Optimail")
+// }
 
 /*
 	Main Functionality
@@ -199,8 +180,8 @@ func (s *Service) Emphasize(c *gin.Context) {
 
 	// handle gpt's resp
 	var createEmphasisRequest = &pb.UsersCreateEmphasisRequest{
-		Id:      idResp.Id,
-		Summary: gptresp,
+		Id:       idResp.Id,
+		Emphasis: gptresp,
 	}
 	_, err = s.userclient.UsersCreateEmphasis(context.Background(), createEmphasisRequest)
 	if err != nil {
@@ -345,7 +326,7 @@ func (s *Service) UpdateSettings(c *gin.Context) {
 		return
 	}
 
-	_, err = s.userclient.UsersUpdateSettings(context.Background(), &req)
+	_, err = s.userclient.UsersUpdateSettings(context.Background(), req)
 	if err != nil {
 		log.Println("**ERROR**: UsersUpdateSettings:", err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
