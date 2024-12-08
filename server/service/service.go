@@ -114,6 +114,7 @@ func (s *Service) Summarize(c *gin.Context) {
 	if err != nil {
 		log.Println("**ERROR**: /summarize", err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, "gpt failed")
+		return
 	}
 
 	// handle gpt's resp
@@ -125,6 +126,7 @@ func (s *Service) Summarize(c *gin.Context) {
 	if err != nil {
 		log.Println("**ERROR**: /summarize", err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, "update db failed")
+		return
 	}
 
 	// ack
@@ -176,6 +178,7 @@ func (s *Service) Emphasize(c *gin.Context) {
 	if err != nil {
 		log.Println("**ERROR**: /emphasize", err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, "gpt failed")
+		return
 	}
 
 	// handle gpt's resp
@@ -187,6 +190,7 @@ func (s *Service) Emphasize(c *gin.Context) {
 	if err != nil {
 		log.Println("**ERROR**: /summarize", err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, "update db failed")
+		return
 	}
 
 	// ack

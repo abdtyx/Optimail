@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/abdtyx/Optimail/server/config"
 )
@@ -62,6 +63,10 @@ func (g *GPTCore) Chat(content string) (gptResponse string, err error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != 200 {
+		err = errors.New("gpt responded:" + strconv.FormatInt(int64(resp.StatusCode), 10))
+		return
+	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return
