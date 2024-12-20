@@ -29,11 +29,11 @@ mail.abdtyx.click				PTR			34.215.113.110
 
 ### optimail-server
 
-The **optimail server** stands as a gateway. Requests from mail agent and users hit this server on port 80.
+The **optimail server** stands as a gateway. Requests from mail agent and users hit this server on port 80. **optimail server** runs on **Amazon EC2**. Domain name `optimail.abdtx.click` points to its IPv4 address. **AWS Route 53** assigned the domain name.
 
 It is implemented by Go using **[Gin](https://gin-gonic.com/)** Web Framework. Routes are registered in `main.go`. There are mainly 3 classes of routes: front-end webpage, email service, and database service. **mail agent** will call email service. Front-end webpage is called by the browser. Database service is called by the javascript code in the webpage.
 
-Below are the structures of **optimail server**.
+Below is the structure of **optimail server**.
 
 **config/**
 
@@ -55,9 +55,9 @@ There are 7 pages in total. css and html are separated. The styles are inspired 
 
 ### micro-user
 
-**micro user** communicates with **optimail server** using grpc protocol. It starts a grpc server on port 50051. For database interactions, it uses [gorm](https://gorm.io/).
+**micro user** communicates with **optimail server** using grpc protocol. It starts a grpc server on port 50051. **micro user** is deployed on **Amazon EC2**. Port 50051 is not exposed. Only **optimail server** has access to it. For database interactions, it uses [gorm](https://gorm.io/). Back-end database endpoint is on **Amazon RDS**.
 
-Below are the structures of **micro user**.
+Below is the structure of **micro user**.
 
 **config/**
 
@@ -78,3 +78,4 @@ grpc implements the required interface of a grpc server so that dto is able to r
 **sql/**
 
 sql files.
+
