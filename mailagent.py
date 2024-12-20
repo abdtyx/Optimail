@@ -6,11 +6,12 @@ import time
 from getpass import getpass
 
 IMAP_SERVER = "mail.abdtyx.click"
+IMAP_PORT = 993
 EMAIL = "admin@abdtyx.click"
 PASSWORD = getpass()
 OPTIMAILAPI = "http://localhost:80/api"
 
-with imaplib.IMAP4(IMAP_SERVER) as mail:
+with imaplib.IMAP4_SSL(IMAP_SERVER, IMAP_PORT) as mail:
     mail.login(EMAIL, PASSWORD)
     while 1:
         mail.select("inbox")
