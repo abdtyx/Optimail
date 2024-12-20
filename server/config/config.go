@@ -6,6 +6,7 @@ import (
 
 type Config struct {
 	JWTKey    string           `mapstructure:"jwtkey"`
+	Hostname  string           `mapstructure:"hostname"`
 	MicroUser *ConfigMicroUser `mapstructure:"microuser"`
 	ChatGPT   *ConfigGPT       `mapstructure:"gpt"`
 	Webpage   *ConfigWebpage   `mapstructure:"webpage"`
@@ -56,6 +57,11 @@ func (cfg *Config) Load() {
 		cfg.JWTKey = tmp.JWTKey
 	} else {
 		panic("JWTKey required in config.toml!")
+	}
+	if tmp.Hostname != "" {
+		cfg.Hostname = tmp.Hostname
+	} else {
+		panic("Hostname required in config.toml!")
 	}
 	if tmp.ChatGPT != nil {
 		if tmp.ChatGPT.Apikey != "" {

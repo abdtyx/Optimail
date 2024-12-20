@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -22,6 +24,15 @@ func main() {
 	s := service.New(cfg)
 
 	router := gin.Default()
+
+	// 80 -> 443
+	go func() {
+		if err := http.ListenAndServe(":80", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "https://"+r.Host+r.URL.String(), http.StatusMovedPermanently)
+		})); err != nil {
+			log.Fatalf("Failed to start HTTP server: %s", err)
+		}
+	}()
 
 	// front end webpage
 	router.StaticFile("/", cfg.Webpage.BasePath+"/index.html")
@@ -57,9 +68,18 @@ func main() {
 		api.GET("/user/emphasis", s.GetEmphasis)
 	}
 
+	// https
+	cert, err := tls.LoadX509KeyPair(fmt.Sprintf("/etc/letsencrypt/live/%v/fullchain.pem", cfg.Hostname), fmt.Sprintf("/etc/letsencrypt/live/%v/privkey.pem", cfg.Hostname))
+	if err != nil {
+		log.Fatalf("Failed to load certificate and key: %s", err)
+	}
+
 	srv := &http.Server{
-		Addr:    ":80",
+		Addr:    ":443",
 		Handler: router.Handler(),
+		TLSConfig: &tls.Config{
+			Certificates: []tls.Certificate{cert},
+		},
 	}
 
 	go func() {
