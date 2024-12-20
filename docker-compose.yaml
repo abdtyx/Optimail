@@ -2,10 +2,9 @@ services:
   optimail-server:
     image: optimail-server
     container_name: optimail-server
-    networks:
-      - host
+    network_mode: "host"
+
   optimail-micro-user:
     image: optimail-micro-user
     container_name: optimail-micro-user
-    networks:
-      - host
+    network_mode: "host"
