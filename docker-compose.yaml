@@ -3,6 +3,8 @@ services:
     image: optimail-server
     container_name: optimail-server
     network_mode: "host"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
 
   optimail-micro-user:
     image: optimail-micro-user

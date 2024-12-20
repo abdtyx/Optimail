@@ -89,5 +89,5 @@ func (cfg *Config) Load() {
 }
 
 func (cfg *Config) String() string {
-	return cfg.JWTKey + "\n" + cfg.ChatGPT.Apiurl + "\n" + cfg.ChatGPT.Model + "\n" + cfg.ChatGPT.Apikey + "\n" + cfg.MicroUser.GrpcAddr + "\n" + cfg.Webpage.BasePath + "\n"
+	return "Config:\n" + cfg.JWTKey + "\n" + cfg.ChatGPT.Apiurl + "\n" + cfg.ChatGPT.Model + "\n" + cfg.ChatGPT.Apikey + "\n" + cfg.MicroUser.GrpcAddr + "\n" + cfg.Webpage.BasePath + "\n"
 }
