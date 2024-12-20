@@ -169,7 +169,7 @@ func (s *Server) UsersUpdateSettings(ctx context.Context, in *dto.UsersUpdateSet
 
 func (s *Server) UsersGetIdByEmail(ctx context.Context, in *dto.UsersGetIdByEmailRequest) (*dto.UsersGetIdByEmailResponse, error) {
 	var setting model.Setting
-	tx := s.db.Where("email = ?", in.Email).First(&setting)
+	tx := s.db.Where("email = ?", strings.ToLower(in.Email)).First(&setting)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -207,7 +207,7 @@ func (s *Server) UsersGetSummary(ctx context.Context, in *dto.UsersGetSummaryReq
 		return nil, err
 	}
 	var res []model.Summary
-	tx := s.db.Where("user_pk = ?", pk).Find(&res)
+	tx := s.db.Order("pk DESC").Where("user_pk = ?", pk).Find(&res)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -244,7 +244,7 @@ func (s *Server) UsersGetEmphasis(ctx context.Context, in *dto.UsersGetEmphasisR
 		return nil, err
 	}
 	var res []model.Emphasis
-	tx := s.db.Where("user_pk = ?", pk).Find(&res)
+	tx := s.db.Order("pk DESC").Where("user_pk = ?", pk).Find(&res)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
