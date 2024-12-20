@@ -10,3 +10,8 @@ services:
     image: optimail-micro-user
     container_name: optimail-micro-user
     network_mode: "host"
+
+  optimail-mail-agent:
+    image: optimail-mail-agent
+    container_name: optimail-mail-agent
+    network_mode: "host"
