@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -69,22 +68,14 @@ func main() {
 	}
 
 	// https
-	cert, err := tls.LoadX509KeyPair(fmt.Sprintf("/etc/letsencrypt/live/%v/fullchain.pem", cfg.Hostname), fmt.Sprintf("/etc/letsencrypt/live/%v/privkey.pem", cfg.Hostname))
-	if err != nil {
-		log.Fatalf("Failed to load certificate and key: %s", err)
-	}
-
 	srv := &http.Server{
 		Addr:    ":443",
 		Handler: router.Handler(),
-		TLSConfig: &tls.Config{
-			Certificates: []tls.Certificate{cert},
-		},
 	}
 
 	go func() {
 		// service connections
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServeTLS(fmt.Sprintf("/etc/letsencrypt/live/%v/fullchain.pem", cfg.Hostname), fmt.Sprintf("/etc/letsencrypt/live/%v/privkey.pem", cfg.Hostname)); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
