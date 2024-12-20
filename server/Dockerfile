@@ -1,9 +1,9 @@
-FROM golang:1.23
+FROM alpine:latest
 
 WORKDIR /go/src/server
 
-COPY . .
-
-RUN go build -o server ./main.go
+COPY ./server .
+COPY ./config.toml .
+COPY ./webpage .
 
 ENTRYPOINT [ "./server" ]

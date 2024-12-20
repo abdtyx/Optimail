@@ -1,9 +1,8 @@
-FROM golang:1.23
+FROM alpine:latest
 
 WORKDIR /go/src/micro-user
 
-COPY . .
-
-RUN go build -o server ./main.go
+COPY ./server .
+COPY ./config.toml .
 
 ENTRYPOINT [ "./server" ]
