@@ -10,7 +10,7 @@ IMAP_SERVER = "mail.abdtyx.click"
 IMAP_PORT = 993
 EMAIL = "admin@abdtyx.click"
 PASSWORD = getpass()
-OPTIMAILAPI = "https://localhost:443/api"
+OPTIMAILAPI = "https://optimail.abdtyx.click/api"
 
 with imaplib.IMAP4_SSL(IMAP_SERVER, IMAP_PORT) as mail:
     mail.login(EMAIL, PASSWORD)
