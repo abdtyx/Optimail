@@ -4,6 +4,7 @@ import requests
 from email.header import decode_header
 import time
 from getpass import getpass
+import traceback
 
 IMAP_SERVER = "mail.abdtyx.click"
 IMAP_PORT = 993
@@ -49,11 +50,25 @@ with imaplib.IMAP4_SSL(IMAP_SERVER, IMAP_PORT) as mail:
                         content_type = part.get_content_type()
                         content_disposition = str(part.get("Content-Disposition"))
                         if content_type == "text/plain" and "attachment" not in content_disposition:
-                            body += part.get_payload(decode=True).decode()
-                            # print("Body:", body)
+                            payload = part.get_payload(decode=True)
+                            if isinstance(payload, bytes) and payload:
+                                charset = part.get_content_charset() or "utf-8"
+                                try:
+                                    body += payload.decode(charset)
+                                except (UnicodeDecodeError, LookupError):
+                                    body += payload.decode("iso-8859-1", errors="replace")
+
                 else:
-                    body += msg.get_payload(decode=True).decode()
-                    # print("Body:", body)
+                    payload = msg.get_payload(decode=True)
+                    if isinstance(payload, bytes) and payload:
+                        charset = msg.get_content_charset() or "utf-8"
+                        try:
+                            body += payload.decode(charset)
+                        except (UnicodeDecodeError, LookupError):
+                            body += payload.decode("iso-8859-1", errors="replace")
+
+                # print("Body:", body)
+
                 # call Optimail api
                 r = requests.post(OPTIMAILAPI + "/summarize", json={"content": body, "email": sender_email})
                 print("**LOG**:", r.status_code, r.text)
@@ -64,5 +79,6 @@ with imaplib.IMAP4_SSL(IMAP_SERVER, IMAP_PORT) as mail:
             time.sleep(1)
         except Exception as e:
             print(e)
+            traceback.print_exc()
             time.sleep(1)
             continue
