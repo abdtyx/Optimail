@@ -210,6 +210,14 @@ func (s *Service) CreateUser(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, "Username and password required")
 		return
 	}
+
+	// whitelist
+	if req.Username != "abdtyx" && req.Username != "m0rsun" {
+		log.Println("**WARNING**: UsersCreateUser: Whitelist denied")
+		c.AbortWithStatusJSON(http.StatusForbidden, errors.New("unauthorized user, please contact admin"))
+		return
+	}
+
 	resp, err := s.userclient.UsersCreateUser(context.Background(), &req)
 	if err != nil {
 		log.Println("**ERROR**: UsersCreateUser:", err)

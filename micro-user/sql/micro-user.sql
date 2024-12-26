@@ -20,6 +20,14 @@ CREATE TABLE `user_settings`  (
   INDEX `idx_user_profiles_user_pk`(`user_pk`) USING BTREE
 );
 
+-- CREATE TABLE `gpttoken`  (
+--   `user_pk` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'pk of user',
+--   `pk` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing primary key',
+
+--   PRIMARY KEY (`pk`),
+--   INDEX `idx_summary_user_pk`(`user_pk`) USING BTREE
+-- );
+
 CREATE TABLE `summary`  (
   `user_pk` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'pk of user',
   `pk` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing primary key',
